@@ -1,6 +1,8 @@
 package com.example.authorization.fasada;
 
 import com.example.authorization.entity.*;
+import com.example.authorization.exceptions.UserEmailExists;
+import com.example.authorization.exceptions.UserNameExsist;
 import com.example.authorization.services.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,8 +26,15 @@ public class AuthController {
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public ResponseEntity<AuthResponse> addNewUser(@Valid @RequestBody UserRegisterDTO user){
-        userService.register(user);
-        return ResponseEntity.ok(new AuthResponse(Code.SUCCESS)) ;
+        try{userService.register(user);
+            return ResponseEntity.ok(new AuthResponse(Code.SUCCESS)) ;
+
+        }catch (UserNameExsist e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthResponse(Code.A4));
+        }catch (UserEmailExists e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AuthResponse(Code.A5));
+        }
+
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)

@@ -3,6 +3,8 @@ package com.example.authorization.services;
 
 import com.example.authorization.entity.*;
 import com.example.authorization.entity.User;
+import com.example.authorization.exceptions.UserEmailExists;
+import com.example.authorization.exceptions.UserNameExsist;
 import com.example.authorization.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
@@ -70,7 +72,13 @@ import java.util.Arrays;
         }
     }
 
-    public void register(UserRegisterDTO userRegisterDTO){
+    public void register(UserRegisterDTO userRegisterDTO) throws UserNameExsist,UserEmailExists {
+        userRepository.findUserByLogin(userRegisterDTO.getLogin()).ifPresent(value->{
+            throw new UserNameExsist("Użytkownik o podanej nazwie jest już zarejestrowany w systemie");
+        });
+        userRepository.findUserByEmail(userRegisterDTO.getEmail()).ifPresent(value->{
+            throw new UserEmailExists("Użytkownik o podanym emailu jest już zarejestrowany w systemie");
+        });
         User user = new User();
         user.setLogin(userRegisterDTO.getLogin());
         user.setPassword(userRegisterDTO.getPassword());
