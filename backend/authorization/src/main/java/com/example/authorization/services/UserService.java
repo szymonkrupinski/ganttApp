@@ -3,17 +3,17 @@ package com.example.authorization.services;
 
 import com.example.authorization.entity.*;
 import com.example.authorization.entity.User;
+import com.example.authorization.exceptions.UserEmailExists;
+import com.example.authorization.exceptions.UserNameExsist;
 import com.example.authorization.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -49,11 +49,11 @@ import java.util.Arrays;
         return jwtService.generateToken(username,exp);
     }
 
-    public void validateToken(HttpServletRequest request) throws ExpiredJwtException, IllegalArgumentException{
+    public void validateToken(HttpServletRequest request, HttpServletResponse response) throws ExpiredJwtException, IllegalArgumentException{
         String token = null;
         String refresh = null;
         for(Cookie value : Arrays.stream(request.getCookies()).toList()) {
-            if (value.getName().equals("token")) {
+            if (value.getName().equals("Authorization")) {
                 token = value.getValue();
             } else if (value.getName().equals("refresh")) {
                 refresh = value.getValue();
@@ -64,10 +64,21 @@ import java.util.Arrays;
 
         }catch (IllegalArgumentException | ExpiredJwtException e ){
             jwtService.validateToken(refresh);
+            Cookie refreshCookie = cookieService.generateCookie("refresh", jwtService.refreshToken(refresh,refreshExp),refreshExp);
+            Cookie cookie = cookieService.generateCookie("Authorization", jwtService.generateToken(token,exp),exp);
+            response.addCookie(cookie);
+            response.addCookie(refreshCookie);
+
         }
     }
 
-    public void register(UserRegisterDTO userRegisterDTO){
+    public void register(UserRegisterDTO userRegisterDTO) throws UserNameExsist,UserEmailExists {
+        userRepository.findUserByLogin(userRegisterDTO.getLogin()).ifPresent(value->{
+            throw new UserNameExsist("Użytkownik o podanej nazwie jest już zarejestrowany w systemie");
+        });
+        userRepository.findUserByEmail(userRegisterDTO.getEmail()).ifPresent(value->{
+            throw new UserEmailExists("Użytkownik o podanym emailu jest już zarejestrowany w systemie");
+        });
         User user = new User();
         user.setLogin(userRegisterDTO.getLogin());
         user.setPassword(userRegisterDTO.getPassword());
