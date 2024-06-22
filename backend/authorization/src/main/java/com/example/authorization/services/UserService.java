@@ -113,6 +113,37 @@ import java.util.Arrays;
         }
         return ResponseEntity.ok(new AuthResponse(Code.A2));
     }
+public ResponseEntity<?> loginByToken(HttpServletRequest request, HttpServletResponse response) {
+try {
+    validateToken(request, response);
+    String refresh = null;
+    for (Cookie value : Arrays.stream(request.getCookies()).toList()) {
+        if (value.getName().equals("refresh")) {
+            refresh = value.getValue();
+        }
+    }
+
+    String login = jwtService.getSubject(refresh);
+    User user = userRepository.findUserByLogin(login).orElse(null);
+    if (user != null) {
+        return ResponseEntity.ok(
+                UserRegisterDTO
+                        .builder()
+                        .login(user.getUsername())
+                        .email(user.getEmail())
+                        .role(user.getRole())
+                        .build()
+        );
+    }
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse(Code.A1));
+}catch (ExpiredJwtException|IllegalArgumentException e){
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new AuthResponse(Code.A3));
+}
+
+}
+
+
+
 
     public ResponseEntity<LoginResponse> logged(HttpServletRequest request, HttpServletResponse response){
         try{
