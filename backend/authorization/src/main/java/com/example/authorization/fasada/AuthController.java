@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.Validation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
 
@@ -39,6 +41,7 @@ public class AuthController {
 
     @RequestMapping(path = "/login", method = RequestMethod.POST)
   public ResponseEntity<?> login(@RequestBody User user, HttpServletResponse response){
+        log.info("--TRY Login USER");
         return userService.login(response,user);
     }
 
@@ -50,6 +53,11 @@ public class AuthController {
         }catch (IllegalArgumentException | ExpiredJwtException e){
             return ResponseEntity.status(401).body(new AuthResponse(Code.A3));
         }
+    }
+
+    @RequestMapping(path = "/autologin",method = RequestMethod.GET)
+    public ResponseEntity<?> autoLogin(HttpServletResponse response, HttpServletRequest request){
+        return userService.loginByToken(request,response);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
