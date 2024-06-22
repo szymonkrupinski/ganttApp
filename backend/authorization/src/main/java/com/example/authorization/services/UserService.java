@@ -113,7 +113,19 @@ import java.util.Arrays;
         }
         return ResponseEntity.ok(new AuthResponse(Code.A2));
     }
-public ResponseEntity<?> loginByToken(HttpServletRequest request, HttpServletResponse response) {
+
+    public ResponseEntity<LoginResponse> logged(HttpServletRequest request, HttpServletResponse response){
+        try{
+            validateToken(request, response);
+            return ResponseEntity.ok(new LoginResponse(true));
+        }catch (ExpiredJwtException|IllegalArgumentException e){
+            return ResponseEntity.ok(new LoginResponse(false));
+        }
+    }
+
+
+
+    public ResponseEntity<?> loginByToken(HttpServletRequest request, HttpServletResponse response) {
 try {
     validateToken(request, response);
     String refresh = null;
