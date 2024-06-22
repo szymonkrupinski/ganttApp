@@ -2,16 +2,14 @@ package com.example.authorization.entity;
 
 
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
+
 
 @Getter
 @Setter
+@AllArgsConstructor
 @Builder
-
 public class UserRegisterDTO {
 
     @Length(min = 5, max = 30, message = "Login powinien zawierać od 5 do 30 znaków")
