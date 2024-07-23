@@ -3,6 +3,7 @@ package com.example.authorization.services;
 
 import com.example.authorization.entity.*;
 import com.example.authorization.entity.User;
+import com.example.authorization.exceptions.UserDontExists;
 import com.example.authorization.exceptions.UserEmailExists;
 import com.example.authorization.exceptions.UserNameExsist;
 import com.example.authorization.repository.UserRepository;
@@ -35,6 +36,7 @@ import java.util.Arrays;
     private int exp;
     @Value("${jwt.refresh.exp}")
     private int refreshExp;
+    private final EmailService emailService;
 
     private User saveUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -80,6 +82,7 @@ import java.util.Arrays;
             throw new UserEmailExists("Użytkownik o podanym emailu jest już zarejestrowany w systemie");
         });
         User user = new User();
+        user.setLock(true);
         user.setLogin(userRegisterDTO.getLogin());
         user.setPassword(userRegisterDTO.getPassword());
         user.setEmail(userRegisterDTO.getEmail());
@@ -89,9 +92,10 @@ import java.util.Arrays;
             user.setRole(Role.USER);
         }
         saveUser(user);
+        emailService.sendActivation(user);
     }
     public ResponseEntity<?> login(HttpServletResponse response, User authRequest) {
-      User user = userRepository.findUserByLogin(authRequest.getUsername()).orElse(null);
+      User user = userRepository.findUserByLoginAndLock(authRequest.getUsername()).orElse(null);
         if (user != null) {
             Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
             if (authenticate.isAuthenticated()) {
@@ -142,7 +146,37 @@ try {
 
 }
 
+    public void activateUserAcc(String uid) throws UserNameExsist {
+        User user = userRepository.findUserByUuid(uid).orElse(null);
+        if(user != null) {
+            user.setLock(false);
+            userRepository.save(user);
+            return;
+        }
+        throw new UserDontExists("User not found");
 
+    }
+
+
+    public void recoveryPassword(String email) throws UserDontExists{
+        User user = userRepository.findUserByEmail(email).orElse(null);
+        if(user != null) {
+            emailService.sendPasswordReset(user);
+            return;
+        }
+        throw new UserDontExists("User not found");
+    }
+
+
+    public void resetPassword(ChangePasswordData changePasswordData) throws UserDontExists {
+        User user = userRepository.findUserByUuid(changePasswordData.getUid()).orElse(null);
+        if(user != null) {
+           user.setPassword(changePasswordData.getPassword());
+           saveUser(user);
+           return;
+        }
+        throw new UserDontExists("User not found");
+    }
 
 
     public ResponseEntity<LoginResponse> logged(HttpServletRequest request, HttpServletResponse response){

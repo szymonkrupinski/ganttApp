@@ -25,7 +25,12 @@ public class UserConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/register","/api/v1/auth/login","/api/v1/auth/validate","/api/v1/auth/autologin","/api/v1/auth/logged").permitAll()
+                .requestMatchers("/api/v1/auth/register",
+                        "/api/v1/auth/login",
+                        "/api/v1/auth/validate",
+                        "/api/v1/auth/autologin",
+                        "/api/v1/auth/logged",
+                        "/api/v1/auth/activate").permitAll()
                 .and()
                 .build();
     }
