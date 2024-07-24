@@ -6,6 +6,7 @@ import com.example.authorization.repository.UserRepository;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.core.io.*;
@@ -16,6 +17,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailService {
 
     private final EmailConfiguration emailConfiguration;
@@ -35,13 +37,14 @@ public class EmailService {
         throw new RuntimeException(e);}
     }
 
-    public void sendPasswordReset(User user) {
+    public void sendPasswordReset(User user, String uid) {
         try{
+            log.info("--START sendPasswordRecovery");
             String html = Files.toString(recoveryPassTemplate.getFile(),Charsets.UTF_8);
-            html = html.replace("https://google.com", frontUrl+"/odzyskaj-haslo"+user.getUuid());
+            html = html.replace("https://google.com", frontUrl+"/odzyskaj-haslo"+uid);
             emailConfiguration.sendEmail(user.getEmail(),html,"Odzyskiwanie hasła",true);
         }catch (IOException e){
-            throw new RuntimeException(e);
+            log.info("nie mozna wysłac maila");
         }
     }
 }
