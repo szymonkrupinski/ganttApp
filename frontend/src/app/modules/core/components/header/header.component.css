@@ -1,0 +1,12 @@
+.btn-custom {
+  border-radius: 30px; /* Usuń zaokrąglenia przycisków */
+  border: none;
+  font-weight: bold ;
+}
+.btn-custom:hover{
+
+}
+
+.options-btn{
+  font-weight: bold;
+}

@@ -1,0 +1,63 @@
+<!-- WIADOMOŚĆ POWITALNA  -->
+<section class="container text-center mt-5">
+  <p class="h1">Utwórz konto w serwisie</p>
+</section>
+
+<!-- POCZĄTEK FORMULARZA REJESTRACJI  -->
+<section class="container bg-light p-5 mt-5 container-option">
+  <form [formGroup]="registerForm">
+
+    <section class="mb-lg-3"><!-- POLE EMAIL  -->
+      <label for="email" class="form-label">E-mail</label>
+      <input type="email"
+             formControlName="email"
+             class="form-control"
+             aria-describedby="emailInfo"
+             id="email"
+             placeholder="name@email.com">
+      <section id="emailInfo" class="form-text">Podaj adres e-mail, będziesz go używać do logowania w serwisie</section>
+      <!-- WALIDACJA POLA WPROWADZANIA EMAIL -->
+      <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
+        <small class="text-danger" *ngIf="registerForm.get('email')?.errors?.['required']">E-mail jest wymagany.</small>
+        <small class="text-danger" *ngIf="registerForm.get('email')?.errors?.['email']">Podaj prawidłowy adres e-mail.</small>
+      </div>
+    </section>
+
+    <section class="mb-lg-3"><!-- POLE WPROWADZANIA HASŁA  -->
+      <label for="password" class="form-label">Hasło:</label>
+      <input [type]="passwordFieldType"
+             formControlName="password"
+             class="form-control"
+             aria-describedby="passwordInfo"
+             id="password"
+             placeholder="Password"
+      required>
+      <section id="passwordInfo" class="form-text">Utwórz hasło do konta</section>
+      <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
+        <small class="text-danger" *ngIf="registerForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
+        <small class="text-danger" *ngIf="registerForm.get('password')?.errors?.['minlength']">Hasło zbyt krótkie</small>
+      </div>
+    </section>
+    <section class="mb-lg-3"><!-- POLE PONOWNEGO WPROWADZENIA HASŁA  -->
+      <label for="password" class="form-label">Powtórz hasło:</label>
+      <input [type]="passwordFieldType"
+             formControlName="confirmPassword"
+             class="form-control"
+             aria-describedby="repeat-passwordInfo"
+             id="repeat-password"
+             placeholder="Repaet password">
+      <section id="repeat-passwordInfo" class="form-text">Powtórz hasło do konta</section>
+      <div *ngIf="registerForm.hasError('notMatching') && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
+        <small class="text-danger">Hasła muszą być identyczne.</small>
+      </div>
+    </section>
+    <section class="mb-3 form-check"><!-- POKAZYWANIE HASŁA ZAMIAST KROPEK  -->
+      <input type="checkbox" class="form-check-input" id="exampleCheck1" (click)="togglePasswordVisibility()">
+      <label class="form-check-label" for="exampleCheck1">Pokaż hasło</label>
+    </section>
+
+    <section class="text-end m-0"><!-- PRZYCISK REJESTRACJI -->
+      <button type="submit" class="btn btn-warning btn-custom font-monospace" style="font-weight: bold">Register</button>
+    </section>
+  </form>
+</section>

@@ -1,0 +1,63 @@
+<!-- WIADOMOŚĆ POWITALNA  -->
+<section class="container text-center mt-5">
+  <p class="h1">Logowanie do panelu użytkownika</p>
+</section>
+
+<!-- POCZĄTEK FORMULARZA LOGOWANIA  -->
+<section class="container container-option bg-light p-5 mt-5">
+  <form [formGroup]="loginForm">
+
+
+    <section class="mb-lg-3"> <!-- POLE LOGOWANIA  -->
+      <label for="email" class="form-label">E-mail</label>
+      <input formControlName="email"
+             type="email"
+             class="form-control"
+             aria-describedby="emailInfo"
+             id="email"
+             placeholder="name@email.com">
+      <section id="emailInfo" class="form-text">Podaj adres e-mail, na który zostało utworzone konto</section>
+      <!-- WALIDACJA POLA LOGOWANIA -->
+      <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)">
+        <small class="text-danger" *ngIf="loginForm.get('email')?.errors?.['required']">E-mail jest wymagany.</small>
+        <small class="text-danger" *ngIf="loginForm.get('email')?.errors?.['email']">Podaj prawidłowy adres e-mail.</small>
+      </div>
+    </section>
+
+    <section class="mb-lg-3"> <!-- POLE WPROWADZANIA HASŁA -->
+      <label for="password" class="form-label">Hasło</label>
+      <input formControlName="password"
+             [type]="passwordFieldType"
+             class="form-control"
+             aria-describedby="passwordInfo"
+             id="password"
+             placeholder="Password"
+             >
+      <section id="passwordInfo" class="form-text">Podaj hasło do konta</section>
+      <!-- WALIDACJA POLA WPROWADZANIA HASŁA -->
+      <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)">
+        <small class="text-danger" *ngIf="loginForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
+        <small class="text-danger" *ngIf="loginForm.get('password')?.errors?.['minlength']">Hasło zbyt krótkie</small>
+      </div>
+    </section>
+
+    <section class="mb-3 form-check">  <!-- POKAZYWANIE HASŁA ZAMIAST KROPEK  -->
+      <input type="checkbox" class="form-check-input" id="showPassword" (click)="togglePasswordVisibility()">
+      <label class="form-check-label" for="showPassword">Pokaż hasło</label>
+    </section>
+
+
+    <section class="text-end m-0"> <!-- PRZYCISK LOGOWANIA  -->
+      <button type="submit"
+              class="btn btn-warning btn-custom font-monospace"
+              style="font-weight: bold"
+      [disabled]="loginForm.invalid">Log in</button>
+    </section>
+  </form>
+</section>
+
+<!-- POMOCNE LINKI -->
+<section class="container container-option bg-primary bg-opacity-25 p-3 pt-4 mt-5 text-center">
+  <p>Zapomniałeś hasła?? Odzyskaj je klikając w <a routerLink="/odzyskiwanie-hasla">Link</a></p>
+  <p>Nie masz jeszcze konta w serisie?? <a routerLink="/register-page">Utwórz je</a></p>
+</section>
