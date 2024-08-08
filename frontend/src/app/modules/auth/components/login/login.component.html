@@ -18,9 +18,11 @@
              placeholder="name@email.com">
       <section id="emailInfo" class="form-text">Podaj adres e-mail, na który zostało utworzone konto</section>
       <!-- WALIDACJA POLA LOGOWANIA -->
-      <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)">
+      <div
+        *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)">
         <small class="text-danger" *ngIf="loginForm.get('email')?.errors?.['required']">E-mail jest wymagany.</small>
-        <small class="text-danger" *ngIf="loginForm.get('email')?.errors?.['email']">Podaj prawidłowy adres e-mail.</small>
+        <small class="text-danger" *ngIf="loginForm.get('email')?.errors?.['email']">Podaj prawidłowy adres
+          e-mail.</small>
       </div>
     </section>
 
@@ -32,10 +34,11 @@
              aria-describedby="passwordInfo"
              id="password"
              placeholder="Password"
-             >
+      >
       <section id="passwordInfo" class="form-text">Podaj hasło do konta</section>
       <!-- WALIDACJA POLA WPROWADZANIA HASŁA -->
-      <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)">
+      <div
+        *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)">
         <small class="text-danger" *ngIf="loginForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
         <small class="text-danger" *ngIf="loginForm.get('password')?.errors?.['minlength']">Hasło zbyt krótkie</small>
       </div>
@@ -51,7 +54,8 @@
       <button type="submit"
               class="btn btn-warning btn-custom font-monospace"
               style="font-weight: bold"
-      [disabled]="loginForm.invalid">Log in</button>
+              [disabled]="loginForm.invalid">Log in
+      </button>
     </section>
   </form>
 </section>

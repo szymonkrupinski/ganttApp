@@ -17,9 +17,11 @@
              placeholder="name@email.com">
       <section id="emailInfo" class="form-text">Podaj adres e-mail, będziesz go używać do logowania w serwisie</section>
       <!-- WALIDACJA POLA WPROWADZANIA EMAIL -->
-      <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
+      <div
+        *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
         <small class="text-danger" *ngIf="registerForm.get('email')?.errors?.['required']">E-mail jest wymagany.</small>
-        <small class="text-danger" *ngIf="registerForm.get('email')?.errors?.['email']">Podaj prawidłowy adres e-mail.</small>
+        <small class="text-danger" *ngIf="registerForm.get('email')?.errors?.['email']">Podaj prawidłowy adres
+          e-mail.</small>
       </div>
     </section>
 
@@ -31,11 +33,14 @@
              aria-describedby="passwordInfo"
              id="password"
              placeholder="Password"
-      required>
+             required>
       <section id="passwordInfo" class="form-text">Utwórz hasło do konta</section>
-      <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
-        <small class="text-danger" *ngIf="registerForm.get('password')?.errors?.['required']">Hasło jest wymagane.</small>
-        <small class="text-danger" *ngIf="registerForm.get('password')?.errors?.['minlength']">Hasło zbyt krótkie</small>
+      <div
+        *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
+        <small class="text-danger" *ngIf="registerForm.get('password')?.errors?.['required']">Hasło jest
+          wymagane.</small>
+        <small class="text-danger" *ngIf="registerForm.get('password')?.errors?.['minlength']">Hasło zbyt
+          krótkie</small>
       </div>
     </section>
     <section class="mb-lg-3"><!-- POLE PONOWNEGO WPROWADZENIA HASŁA  -->
@@ -47,7 +52,8 @@
              id="repeat-password"
              placeholder="Repaet password">
       <section id="repeat-passwordInfo" class="form-text">Powtórz hasło do konta</section>
-      <div *ngIf="registerForm.hasError('notMatching') && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
+      <div
+        *ngIf="registerForm.hasError('notMatching') && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
         <small class="text-danger">Hasła muszą być identyczne.</small>
       </div>
     </section>
@@ -57,7 +63,8 @@
     </section>
 
     <section class="text-end m-0"><!-- PRZYCISK REJESTRACJI -->
-      <button type="submit" class="btn btn-warning btn-custom font-monospace" style="font-weight: bold">Register</button>
+      <button type="submit" class="btn btn-warning btn-custom font-monospace" style="font-weight: bold">Register
+      </button>
     </section>
   </form>
 </section>

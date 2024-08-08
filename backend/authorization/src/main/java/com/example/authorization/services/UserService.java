@@ -79,23 +79,20 @@ import java.util.Arrays;
         }
     }
 
-    public void register(UserRegisterDTO userRegisterDTO) throws UserNameExsist,UserEmailExists {
+    public void register(UserRegisterDTO userRegisterDTO) throws UserNameExsist, UserEmailExists {
         userRepository.findUserByLogin(userRegisterDTO.getLogin()).ifPresent(value->{
-            throw new UserNameExsist("Użytkownik o podanej nazwie jest już zarejestrowany w systemie");
+            throw new UserEmailExists("Użytkownik o nazwie juz istnieje");
         });
+
         userRepository.findUserByEmail(userRegisterDTO.getEmail()).ifPresent(value->{
-            throw new UserEmailExists("Użytkownik o podanym emailu jest już zarejestrowany w systemie");
+            throw new UserEmailExists("Użytkownik o mailu juz istnieje");
         });
+
         User user = new User();
-        user.setLock(true);
         user.setLogin(userRegisterDTO.getLogin());
-        user.setPassword(userRegisterDTO.getPassword());
         user.setEmail(userRegisterDTO.getEmail());
-        if(userRegisterDTO.getRole() != null) {
-            user.setRole(userRegisterDTO.getRole());
-        }else{
-            user.setRole(Role.USER);
-        }
+        user.setPassword(userRegisterDTO.getPassword());
+        user.setRole(userRegisterDTO.getRole());
         saveUser(user);
         emailService.sendActivation(user);
     }
@@ -183,7 +180,6 @@ try {
                user.setPassword(changePasswordData.getPassword());
                saveUser(user);
                resetOperationService.endOperation(resetOperations.getUid());
-               return;
            }
        }
     }

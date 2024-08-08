@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './components/header/header.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HeaderComponent} from './components/header/header.component';
 import {RouterLink, RouterLinkActive} from "@angular/router";
-
 
 
 @NgModule({
@@ -15,7 +14,9 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
   imports: [
     CommonModule,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
   ]
 })
-export class CoreModule { }
+export class CoreModule {
+}
+

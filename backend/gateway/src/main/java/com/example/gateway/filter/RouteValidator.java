@@ -12,7 +12,6 @@ public class RouteValidator {
             "/auth/login",
             "/auth/register",
             "/auth/validate",
-            "/auth/validate",
             "/auth/activate",
             "/auth/reset-password"
 
