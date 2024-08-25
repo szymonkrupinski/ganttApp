@@ -1,0 +1,51 @@
+<!-- POCZĄTEK FORMULARZA TWORZENIA NOWEGO HASŁA  -->
+<section class="container bg-light p-5 mt-5 container-option">
+  <form [formGroup]="recoveryForm">
+    <section class="mb-lg-3"><!-- POLE WPROWADZANIA HASŁA  -->
+      <label for="password" class="form-label">Hasło:</label>
+      <input [type]="passwordFieldType"
+             formControlName="password"
+             class="form-control"
+             aria-describedby="passwordInfo"
+             id="password"
+             placeholder="Password"
+             required>
+      <section id="passwordInfo" class="form-text">Utwórz hasło do konta</section>
+      <div
+        *ngIf="recoveryForm.get('password')?.invalid && (recoveryForm.get('password')?.touched || recoveryForm.get('password')?.dirty)">
+        <small class="text-danger" *ngIf="recoveryForm.get('password')?.errors?.['required']">Hasło jest
+          wymagane.</small>
+        <small class="text-danger" *ngIf="recoveryForm.get('password')?.errors?.['minlength']">Hasło zbyt
+          krótkie</small>
+      </div>
+    </section>
+    <section class="mb-lg-3"><!-- POLE PONOWNEGO WPROWADZENIA HASŁA  -->
+      <label for="password" class="form-label">Powtórz hasło:</label>
+      <input [type]="passwordFieldType"
+             formControlName="confirmPassword"
+             class="form-control"
+             aria-describedby="repeat-passwordInfo"
+             id="repeat-password"
+             placeholder="Repaet password">
+      <section id="repeat-passwordInfo" class="form-text">Powtórz hasło do konta</section>
+      <div
+        *ngIf="recoveryForm.hasError('notMatching') && (recoveryForm.get('confirmPassword')?.touched || recoveryForm.get('confirmPassword')?.dirty)">
+        <small class="text-danger">Hasła muszą być identyczne.</small>
+      </div>
+    </section>
+
+    <section class="mb-3 form-check"><!-- POKAZYWANIE HASŁA ZAMIAST KROPEK  -->
+      <input type="checkbox" class="form-check-input" id="exampleCheck1" (click)="togglePasswordVisibility()">
+      <label class="form-check-label" for="exampleCheck1">Pokaż hasło</label>
+    </section>
+
+    <section class="text-end m-0"> <!-- PRZYCISK TWORZENIA HASŁA  -->
+      <button type="submit"
+              class="btn btn-warning btn-custom font-monospace"
+              style="font-weight: bold"
+              [disabled]="recoveryForm.invalid">Utwórz hasło
+      </button>
+    </section>
+
+  </form>
+</section>
